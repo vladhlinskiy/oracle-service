@@ -27,6 +27,7 @@ import io.cdap.plugin.common.Constants;
 import io.cdap.plugin.common.IdUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,7 +45,7 @@ public class OracleConfig extends PluginConfig {
   @Name(OracleConstants.AUTHENTICATION_TYPE)
   @Description("Specifies the mode of authentication to use.")
   @Macro
-  private String authenticationType;
+  private String authenticationTypeName;
 
   @Name(OracleConstants.SERVER_URL)
   @Description("REST server URL from the account creation email that you receive from Oracle. " +
@@ -118,11 +119,12 @@ public class OracleConfig extends PluginConfig {
   @Nullable
   private String endDate;
 
-  public OracleConfig(String referenceName, String authenticationType, String serverUrl, String user, String password,
-                      String sessionId, String accessToken, String queryTypeName, String serviceCloudObject,
-                      String query, String sortBy, String sortDirection, String startDate, String endDate) {
+  public OracleConfig(String referenceName, String authenticationTypeName, String serverUrl, String user,
+                      String password, String sessionId, String accessToken, String queryTypeName,
+                      String serviceCloudObject, String query, String sortBy, String sortDirection, String startDate,
+                      String endDate) {
     this.referenceName = referenceName;
-    this.authenticationType = authenticationType;
+    this.authenticationTypeName = authenticationTypeName;
     this.serverUrl = serverUrl;
     this.user = user;
     this.password = password;
@@ -141,8 +143,12 @@ public class OracleConfig extends PluginConfig {
     return referenceName;
   }
 
-  public String getAuthenticationType() {
-    return authenticationType;
+  public String getAuthenticationTypeName() {
+    return authenticationTypeName;
+  }
+
+  public AuthenticationType getAuthenticationType() {
+    return Objects.requireNonNull(AuthenticationType.fromDisplayName(authenticationTypeName));
   }
 
   public String getServerUrl() {
@@ -171,6 +177,10 @@ public class OracleConfig extends PluginConfig {
 
   public String getQueryTypeName() {
     return queryTypeName;
+  }
+
+  public QueryType getQueryType() {
+    return Objects.requireNonNull(QueryType.fromDisplayName(queryTypeName));
   }
 
   @Nullable
@@ -209,22 +219,58 @@ public class OracleConfig extends PluginConfig {
    * @param collector failure collector.
    */
   public void validate(FailureCollector collector) {
-    // TODO review properties
     if (Strings.isNullOrEmpty(referenceName)) {
       collector.addFailure("Reference name must be specified", null)
         .withConfigProperty(Constants.Reference.REFERENCE_NAME);
     } else {
       IdUtils.validateReferenceName(referenceName, collector);
     }
-    if (!containsMacro(OracleConstants.USERNAME) && !containsMacro(OracleConstants.PASSWORD) &&
-      Strings.isNullOrEmpty(user) && !Strings.isNullOrEmpty(password)) {
-      collector.addFailure("Username must be specified", null)
-        .withConfigProperty(OracleConstants.USERNAME);
+    if (!containsMacro(OracleConstants.AUTHENTICATION_TYPE)) {
+      if (Strings.isNullOrEmpty(authenticationTypeName)) {
+        collector.addFailure("Authentication type must be specified", null)
+          .withConfigProperty(OracleConstants.AUTHENTICATION_TYPE);
+      } else if (AuthenticationType.fromDisplayName(authenticationTypeName) == null) {
+        collector.addFailure("Invalid authentication type name", null)
+          .withConfigProperty(OracleConstants.AUTHENTICATION_TYPE);
+      } else if (AuthenticationType.fromDisplayName(authenticationTypeName) == AuthenticationType.BASIC) {
+        if (!containsMacro(OracleConstants.USERNAME) && Strings.isNullOrEmpty(user)) {
+          collector.addFailure("Username must be specified", null)
+            .withConfigProperty(OracleConstants.USERNAME);
+        }
+        if (!containsMacro(OracleConstants.PASSWORD) && Strings.isNullOrEmpty(password)) {
+          collector.addFailure("Password must be specified", null)
+            .withConfigProperty(OracleConstants.PASSWORD);
+        }
+      } else if (AuthenticationType.fromDisplayName(authenticationTypeName) == AuthenticationType.SESSION) {
+        if (!containsMacro(OracleConstants.SESSION_ID) && Strings.isNullOrEmpty(sessionId)) {
+          collector.addFailure("Session ID must be specified", null)
+            .withConfigProperty(OracleConstants.SESSION_ID);
+        }
+      } else if (AuthenticationType.fromDisplayName(authenticationTypeName) == AuthenticationType.OAUTH) {
+        if (!containsMacro(OracleConstants.ACCESS_TOKEN) && Strings.isNullOrEmpty(sessionId)) {
+          collector.addFailure("Access token must be specified", null)
+            .withConfigProperty(OracleConstants.ACCESS_TOKEN);
+        }
+      }
     }
-    if (!containsMacro(OracleConstants.USERNAME) && !containsMacro(OracleConstants.PASSWORD) &&
-      !Strings.isNullOrEmpty(user) && Strings.isNullOrEmpty(password)) {
-      collector.addFailure("Password must be specified", null)
-        .withConfigProperty(OracleConstants.PASSWORD);
+    if (!containsMacro(OracleConstants.QUERY_TYPE)) {
+      if (Strings.isNullOrEmpty(queryTypeName)) {
+        collector.addFailure("Query type must be specified", null)
+          .withConfigProperty(OracleConstants.QUERY_TYPE);
+      } else if (QueryType.fromDisplayName(queryTypeName) == null) {
+        collector.addFailure("Invalid query type name", null)
+          .withConfigProperty(OracleConstants.QUERY_TYPE);
+      } else if (QueryType.fromDisplayName(queryTypeName) == QueryType.ROQL) {
+        if (!containsMacro(OracleConstants.QUERY) && Strings.isNullOrEmpty(query)) {
+          collector.addFailure("Query must be specified", null)
+            .withConfigProperty(OracleConstants.QUERY);
+        }
+      } else if (QueryType.fromDisplayName(queryTypeName) == QueryType.FULL_OBJECT) {
+        if (!containsMacro(OracleConstants.SERVICE_CLOUD_OBJECT) && Strings.isNullOrEmpty(serviceCloudObject)) {
+          collector.addFailure("Object to pull must be specified", null)
+            .withConfigProperty(OracleConstants.SERVICE_CLOUD_OBJECT);
+        }
+      }
     }
   }
 

@@ -74,7 +74,7 @@ public class OracleSource extends BatchSource<NullWritable, JsonObject, Structur
     Schema schema = context.getOutputSchema();
     LineageRecorder lineageRecorder = new LineageRecorder(context, config.getReferenceName());
     lineageRecorder.createExternalDataset(schema);
-    lineageRecorder.recordRead("Read", String.format("TODO Read bucket 's' from Oracle Service Cloud 's'"),
+    lineageRecorder.recordRead("Read", String.format("Read from Oracle Service Cloud '%s'", config.getServerUrl()),
                                Preconditions.checkNotNull(schema.getFields()).stream()
                                  .map(Schema.Field::getName)
                                  .collect(Collectors.toList()));
