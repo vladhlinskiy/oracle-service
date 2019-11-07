@@ -1,0 +1,275 @@
+{
+  "metadata": {
+    "spec-version": "1.5"
+  },
+  "display-name": "Oracle Service Cloud",
+  "configuration-groups": [
+    {
+      "label": "Basic",
+      "properties": [
+        {
+          "widget-type": "textbox",
+          "label": "Reference Name",
+          "name": "referenceName"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "REST Server URL",
+          "name": "serverUrl"
+        },
+        {
+          "name": "authenticationType",
+          "label": "Authentication Type",
+          "widget-type": "radio-group",
+          "widget-attributes": {
+            "layout": "block",
+            "default": "basic",
+            "options": [
+              {
+                "id": "basic",
+                "label": "Basic"
+              },
+              {
+                "id": "session",
+                "label": "Session"
+              },
+              {
+                "id": "oauth",
+                "label": "OAuth"
+              }
+            ]
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Username",
+          "name": "username"
+        },
+        {
+          "widget-type": "password",
+          "label": "Password",
+          "name": "password"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Session",
+          "name": "sessionId"
+        },
+        {
+          "widget-type": "textarea",
+          "label": "Access Token",
+          "name": "accessToken"
+        },
+        {
+          "name": "queryType",
+          "label": "Query Type",
+          "widget-type": "radio-group",
+          "widget-attributes": {
+            "layout": "block",
+            "default": "roql",
+            "options": [
+              {
+                "id": "roql",
+                "label": "ROQL Query"
+              },
+              {
+                "id": "fullObject",
+                "label": "Full Object"
+              }
+            ]
+          }
+        },
+        {
+          "name": "serviceCloudObject",
+          "label": "Object To Pull",
+          "widget-type": "select",
+          "widget-attributes": {
+            "default": "Accounts",
+            "values": [
+              "Accounts",
+              "Analytics Report Results",
+              "Analytics Reports",
+              "Answers",
+              "Answer Versions",
+              "Assets",
+              "Assets Statuses",
+              "Campaigns",
+              "Channel Types",
+              "Chats",
+              "Configurations",
+              "Contacts",
+              "Event Subscriptions",
+              "Holidays",
+              "Incidents",
+              "Mailboxes",
+              "Marketing Mailboxes",
+              "Message Bases",
+              "Named ID Hierarchies",
+              "Named IDs",
+              "Opportunities",
+              "Opportunity Statuses",
+              "Organizations",
+              "Purchased Products",
+              "Query Results",
+              "Sales Products",
+              "Sales Territories",
+              "Service Categories",
+              "Service Dispositions",
+              "Service Mailboxes",
+              "Service Products",
+              "Site Interfaces",
+              "SSO Token References",
+              "Standard Contents",
+              "Tasks",
+              "Variables"
+            ]
+          }
+        },
+        {
+          "widget-type": "textarea",
+          "label": "ROQL Query",
+          "name": "query"
+        }
+      ]
+    },
+    {
+      "label": "Advanced",
+      "properties": [
+        {
+          "widget-type": "textbox",
+          "label": "Sort By",
+          "name": "sortBy"
+        },
+        {
+          "name": "sortDirection",
+          "label": "Sort Direction",
+          "widget-type": "radio-group",
+          "widget-attributes": {
+            "layout": "block",
+            "default": "asc",
+            "options": [
+              {
+                "id": "asc",
+                "label": "Ascending"
+              },
+              {
+                "id": "desc",
+                "label": "Descending"
+              }
+            ]
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Start Date",
+          "name": "startDate"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "End Date",
+          "name": "endDate"
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "schema",
+      "label": "schema",
+      "widget-type": "schema",
+      "widget-attributes": {
+        "schema-types": [
+          "boolean",
+          "int",
+          "long",
+          "float",
+          "double",
+          "bytes",
+          "string",
+          "array",
+          "record",
+          "map",
+          "union"
+        ],
+        "schema-default-type": "string",
+        "property-watch": "format"
+      }
+    }
+  ],
+  "filters": [
+    {
+      "name": "Basic Authentication",
+      "condition": {
+        "property": "authenticationType",
+        "operator": "equal to",
+        "value": "basic"
+      },
+      "show": [
+        {
+          "name": "username",
+          "type": "property"
+        },
+        {
+          "name": "password",
+          "type": "property"
+        }
+      ]
+    },
+    {
+      "name": "Session Authentication",
+      "condition": {
+        "property": "authenticationType",
+        "operator": "equal to",
+        "value": "session"
+      },
+      "show": [
+        {
+          "name": "sessionId",
+          "type": "property"
+        }
+      ]
+    },
+    {
+      "name": "OAuth Authentication",
+      "condition": {
+        "property": "authenticationType",
+        "operator": "equal to",
+        "value": "oauth"
+      },
+      "show": [
+        {
+          "name": "accessToken",
+          "type": "property"
+        }
+      ]
+    },
+    {
+      "name": "ROQL Query Type",
+      "condition": {
+        "property": "queryType",
+        "operator": "equal to",
+        "value": "roql"
+      },
+      "show": [
+        {
+          "name": "query",
+          "type": "property"
+        }
+      ]
+    },
+    {
+      "name": "Full Object Query Type",
+      "condition": {
+        "property": "queryType",
+        "operator": "equal to",
+        "value": "fullObject"
+      },
+      "show": [
+        {
+          "name": "serviceCloudObject",
+          "type": "property"
+        }
+      ]
+    }
+  ]
+}
