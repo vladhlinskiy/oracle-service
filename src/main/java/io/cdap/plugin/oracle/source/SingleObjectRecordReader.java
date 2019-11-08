@@ -17,8 +17,10 @@ package io.cdap.plugin.oracle.source;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.cdap.plugin.oracle.OracleConfig;
+import io.cdap.plugin.oracle.OracleServiceCloudClient;
 import org.apache.commons.collections.iterators.EmptyIterator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
@@ -34,10 +36,11 @@ import java.util.Iterator;
 /**
  * RecordReader implementation, which reads JsonObject entries.
  */
-public class JsonObjectRecordReader extends RecordReader<NullWritable, JsonObject> {
-  private static final Logger LOG = LoggerFactory.getLogger(JsonObjectRecordReader.class);
+public class SingleObjectRecordReader extends RecordReader<NullWritable, JsonObject> {
+  private static final Logger LOG = LoggerFactory.getLogger(SingleObjectRecordReader.class);
   private static final Gson gson = new GsonBuilder().create();
 
+  private OracleServiceCloudClient cloudClient;
   private Iterator<JsonObject> iterator;
   private JsonObject value;
 
@@ -48,13 +51,13 @@ public class JsonObjectRecordReader extends RecordReader<NullWritable, JsonObjec
    * @param taskAttemptContext task context
    */
   @Override
-  public void initialize(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) {
+  public void initialize(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException {
     Configuration conf = taskAttemptContext.getConfiguration();
     String confJson = conf.get(JsonObjectInputFormatProvider.PROPERTY_CONFIG_JSON);
     OracleConfig config = gson.fromJson(confJson, OracleConfig.class);
+    cloudClient = new OracleServiceCloudClient(config);
 
-    // TODO implement
-    this.iterator = EmptyIterator.INSTANCE;
+    this.iterator = cloudClient.collection(config.getOracleObject());
   }
 
   @Override
@@ -85,6 +88,8 @@ public class JsonObjectRecordReader extends RecordReader<NullWritable, JsonObjec
   @Override
   public void close() throws IOException {
     LOG.trace("Closing Record reader");
-    // TODO
+    if (cloudClient != null) {
+      cloudClient.close();
+    }
   }
 }

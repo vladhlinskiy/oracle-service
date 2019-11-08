@@ -16,6 +16,7 @@
 
 package io.cdap.plugin.oracle;
 
+import io.cdap.cdap.api.data.schema.Schema;
 import io.cdap.cdap.etl.api.validation.CauseAttributes;
 import io.cdap.cdap.etl.api.validation.ValidationFailure;
 import io.cdap.cdap.etl.mock.validation.MockFailureCollector;
@@ -33,6 +34,9 @@ import javax.annotation.Nonnull;
 public class OracleConfigTest {
 
   private static final String MOCK_STAGE = "mockstage";
+  private static final Schema VALID_SCHEMA = Schema.recordOf(
+    "schema",
+    Schema.Field.of("lookupName", Schema.of(Schema.Type.STRING)));
 
   private OracleConfigBuilder getValidConfigBuilder() {
     return OracleConfigBuilder.builder()
@@ -41,7 +45,13 @@ public class OracleConfigTest {
       .setUser("user")
       .setPassword("password")
       .setQueryTypeName(QueryType.ROQL.getDisplayName())
-      .setQuery("Select Contact from Contact where Contact.Name.First = 'Lin' AND Contact.Address.City = 'CA'");
+      .setQuery("Select Contact from Contact where Contact.Name.First = 'Lin' AND Contact.Address.City = 'CA'")
+      .setSchema(VALID_SCHEMA.toString());
+  }
+
+  @Test
+  public void testGetParsedSchema() {
+    Assert.assertEquals(VALID_SCHEMA, getValidConfigBuilder().build().getParsedSchema());
   }
 
   @Test
@@ -293,6 +303,8 @@ public class OracleConfigTest {
     config.validate(failureCollector);
     assertValidationFailed(failureCollector, OracleConstants.ACCESS_TOKEN);
   }
+
+  // TODO schema tests
 
   protected static void assertValidationFailed(MockFailureCollector failureCollector, String paramName) {
     List<ValidationFailure> failureList = failureCollector.getValidationFailures();

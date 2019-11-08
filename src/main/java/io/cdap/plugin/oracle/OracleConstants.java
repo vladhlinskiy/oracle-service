@@ -31,6 +31,12 @@ public class OracleConstants {
   public static final String PLUGIN_NAME = "Oracle";
 
   /**
+   * Oracle Service Cloud API root path including API version which corresponds to the
+   * Connect Common Object Model (CCOM) version v1.4.
+   */
+  public static final String API_ROOT_PATH = "/services/rest/connect/v1.4/";
+
+  /**
    * Configuration property name used to specify the mode of authentication to use.
    */
   public static final String AUTHENTICATION_TYPE = "authenticationType";
@@ -102,4 +108,6 @@ public class OracleConstants {
    * specified date.
    */
   public static final String END_DATE = "endDate";
+
+  // TODO schemas?
 }

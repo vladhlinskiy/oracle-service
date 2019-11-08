@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "lookupName": "Administrator",
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "lookupName": "Snowball Cat",
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/2"
+        }
+      ]
+    },
+    {
+      "id": 254,
+      "lookupName": "Random User",
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/254"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts"
+    },
+    {
+      "rel": "canonical",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts"
+    },
+    {
+      "rel": "describedby",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/metadata-catalog/accounts"
+    },
+    {
+      "rel": "alternate",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts",
+      "mediaType": "application/schema+json"
+    }
+  ]
+}

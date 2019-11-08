@@ -38,6 +38,6 @@ public class JsonObjectRowInputFormat extends InputFormat {
   @Override
   public RecordReader<NullWritable, JsonObject> createRecordReader(
     InputSplit inputSplit, TaskAttemptContext taskAttemptContext) {
-    return new JsonObjectRecordReader();
+    return new SingleObjectRecordReader();
   }
 }

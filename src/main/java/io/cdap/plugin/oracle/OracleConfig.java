@@ -26,6 +26,7 @@ import io.cdap.cdap.etl.api.FailureCollector;
 import io.cdap.plugin.common.Constants;
 import io.cdap.plugin.common.IdUtils;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -119,10 +120,14 @@ public class OracleConfig extends PluginConfig {
   @Nullable
   private String endDate;
 
+  @Name(OracleConstants.SCHEMA)
+  @Description("Schema of records output by the source.")
+  private String schema;
+
   public OracleConfig(String referenceName, String authenticationTypeName, String serverUrl, String user,
                       String password, String sessionId, String accessToken, String queryTypeName,
                       String serviceCloudObject, String query, String sortBy, String sortDirection, String startDate,
-                      String endDate) {
+                      String endDate, String schema) {
     this.referenceName = referenceName;
     this.authenticationTypeName = authenticationTypeName;
     this.serverUrl = serverUrl;
@@ -137,6 +142,7 @@ public class OracleConfig extends PluginConfig {
     this.sortDirection = sortDirection;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.schema = schema;
   }
 
   public String getReferenceName() {
@@ -189,6 +195,11 @@ public class OracleConfig extends PluginConfig {
   }
 
   @Nullable
+  public OracleObject getOracleObject() {
+    return Strings.isNullOrEmpty(serviceCloudObject) ? null : OracleObject.fromDisplayName(serviceCloudObject);
+  }
+
+  @Nullable
   public String getQuery() {
     return query;
   }
@@ -213,6 +224,26 @@ public class OracleConfig extends PluginConfig {
     return endDate;
   }
 
+  public String getSchema() {
+    return schema;
+  }
+
+  /**
+   * Parses the json representation into a schema object.
+   *
+   * @return parsed schema object of json representation.
+   * @throws RuntimeException if there was an exception parsing the schema.
+   */
+  @Nullable
+  public Schema getParsedSchema() {
+    try {
+      return Strings.isNullOrEmpty(schema) ? null : Schema.parseJson(schema);
+    } catch (IOException e) {
+      // this should not happen, since schema string comes from UI
+      throw new IllegalStateException(String.format("Could not parse schema string: '%s'", schema), e);
+    }
+  }
+
   /**
    * Validates {@link OracleConfig} instance.
    *
@@ -224,6 +255,11 @@ public class OracleConfig extends PluginConfig {
         .withConfigProperty(Constants.Reference.REFERENCE_NAME);
     } else {
       IdUtils.validateReferenceName(referenceName, collector);
+    }
+    if (!containsMacro(OracleConstants.SCHEMA) && Strings.isNullOrEmpty(schema)) {
+      // TODO schema inference
+      collector.addFailure("Output schema must be specified", null)
+        .withConfigProperty(OracleConstants.SCHEMA);
     }
     if (!containsMacro(OracleConstants.AUTHENTICATION_TYPE)) {
       if (Strings.isNullOrEmpty(authenticationTypeName)) {

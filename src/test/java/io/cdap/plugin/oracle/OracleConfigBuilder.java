@@ -26,6 +26,7 @@ public class OracleConfigBuilder {
   private String authenticationTypeName;
   private String queryTypeName;
   private String serverUrl;
+  private String schema;
 
   @Nullable
   private String user;
@@ -76,7 +77,8 @@ public class OracleConfigBuilder {
       .setSortBy(original.getSortBy())
       .setSortDirection(original.getSortDirection())
       .setStartDate(original.getStartDate())
-      .setEndDate(original.getEndDate());
+      .setEndDate(original.getEndDate())
+      .setSchema(original.getSchema());
   }
 
   public OracleConfigBuilder setReferenceName(String referenceName) {
@@ -149,8 +151,14 @@ public class OracleConfigBuilder {
     return this;
   }
 
+  public OracleConfigBuilder setSchema(String schema) {
+    this.schema = schema;
+    return this;
+  }
+
   public OracleConfig build() {
     return new OracleConfig(referenceName, authenticationTypeName, serverUrl, user, password, sessionId, accessToken,
-                            queryTypeName, serviceCloudObject, query, sortBy, sortDirection, startDate, endDate);
+                            queryTypeName, serviceCloudObject, query, sortBy, sortDirection, startDate, endDate,
+                            schema);
   }
 }
