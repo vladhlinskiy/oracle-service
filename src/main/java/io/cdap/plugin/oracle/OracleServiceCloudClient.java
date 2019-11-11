@@ -56,6 +56,8 @@ public class OracleServiceCloudClient implements Closeable {
   }
 
   public Iterator<JsonObject> collection(OracleObject oracleObject) throws IOException {
+    // TODO include 'fields' query parameter
+    // https://docs.oracle.com/en/cloud/saas/service/19c/cxsvc/c_osvc_manage_collections.html
     CloseableHttpResponse response = httpGet(serviceRoot + oracleObject.getResourceName());
     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
     JsonArray collection = PARSER.parse(responseString).getAsJsonObject().getAsJsonArray("items"); // TODO

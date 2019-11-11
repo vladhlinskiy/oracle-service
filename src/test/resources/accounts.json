@@ -3,6 +3,89 @@
     {
       "id": 1,
       "lookupName": "Administrator",
+      "accountHierarchy": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/1/accountHierarchy"
+          }
+        ]
+      },
+      "attributes": {
+        "accountLocked": false,
+        "canModifyEmailSignature": false,
+        "forcePasswordChange": false,
+        "infrequentUser": false,
+        "passwordNeverExpires": false,
+        "permanentlyDisabled": false,
+        "staffAssignmentDisabled": true,
+        "viewsReportsDisabled": true,
+        "virtualAccount": false
+      },
+      "country": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/1"
+          },
+          {
+            "rel": "canonical",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/1"
+          },
+          {
+            "rel": "describedby",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/metadata-catalog/countries",
+            "mediaType": "application/schema+json"
+          }
+        ]
+      },
+      "customFields": {
+        "c": {}
+      },
+      "displayName": "Administrator",
+      "emailNotification": null,
+      "emails": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/1/emails"
+          }
+        ]
+      },
+      "login": "administrator",
+      "manager": null,
+      "name": {
+        "first": "Administrator",
+        "last": "-"
+      },
+      "nameFurigana": {
+        "first": null,
+        "last": null
+      },
+      "notificationPending": false,
+      "passwordExpirationTime": "2020-12-31T09:00:00.000Z",
+      "phones": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/1/phones"
+          }
+        ]
+      },
+      "profile": {
+        "id": 1,
+        "lookupName": "Full Access"
+      },
+      "salesSettings": {
+        "defaultCurrency": {
+          "id": 1,
+          "lookupName": "USD"
+        },
+        "territory": null
+      },
+      "serviceSettings": {},
+      "signature": null,
+      "staffGroup": null,
       "links": [
         {
           "rel": "canonical",
@@ -13,6 +96,89 @@
     {
       "id": 2,
       "lookupName": "Snowball Cat",
+      "accountHierarchy": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/2/accountHierarchy"
+          }
+        ]
+      },
+      "attributes": {
+        "accountLocked": false,
+        "canModifyEmailSignature": false,
+        "forcePasswordChange": false,
+        "infrequentUser": false,
+        "passwordNeverExpires": false,
+        "permanentlyDisabled": false,
+        "staffAssignmentDisabled": true,
+        "viewsReportsDisabled": true,
+        "virtualAccount": false
+      },
+      "country": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/2"
+          },
+          {
+            "rel": "canonical",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/2"
+          },
+          {
+            "rel": "describedby",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/metadata-catalog/countries",
+            "mediaType": "application/schema+json"
+          }
+        ]
+      },
+      "customFields": {
+        "c": {}
+      },
+      "displayName": "Administrator",
+      "emailNotification": null,
+      "emails": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/2/emails"
+          }
+        ]
+      },
+      "login": "snowball",
+      "manager": null,
+      "name": {
+        "first": "Snowball",
+        "last": "-"
+      },
+      "nameFurigana": {
+        "first": null,
+        "last": null
+      },
+      "notificationPending": false,
+      "passwordExpirationTime": "2020-12-31T09:00:00.000Z",
+      "phones": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/2/phones"
+          }
+        ]
+      },
+      "profile": {
+        "id": 2,
+        "lookupName": "Access"
+      },
+      "salesSettings": {
+        "defaultCurrency": {
+          "id": 1,
+          "lookupName": "USD"
+        },
+        "territory": null
+      },
+      "serviceSettings": {},
+      "signature": null,
+      "staffGroup": null,
       "links": [
         {
           "rel": "canonical",
@@ -21,12 +187,95 @@
       ]
     },
     {
-      "id": 254,
+      "id": 3,
       "lookupName": "Random User",
+      "accountHierarchy": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/3/accountHierarchy"
+          }
+        ]
+      },
+      "attributes": {
+        "accountLocked": false,
+        "canModifyEmailSignature": false,
+        "forcePasswordChange": false,
+        "infrequentUser": false,
+        "passwordNeverExpires": false,
+        "permanentlyDisabled": false,
+        "staffAssignmentDisabled": true,
+        "viewsReportsDisabled": true,
+        "virtualAccount": false
+      },
+      "country": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/3"
+          },
+          {
+            "rel": "canonical",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/countries/3"
+          },
+          {
+            "rel": "describedby",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/metadata-catalog/countries",
+            "mediaType": "application/schema+json"
+          }
+        ]
+      },
+      "customFields": {
+        "c": {}
+      },
+      "displayName": "Random",
+      "emailNotification": null,
+      "emails": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/3/emails"
+          }
+        ]
+      },
+      "login": "random",
+      "manager": null,
+      "name": {
+        "first": "Random",
+        "last": "-"
+      },
+      "nameFurigana": {
+        "first": null,
+        "last": null
+      },
+      "notificationPending": false,
+      "passwordExpirationTime": "2020-12-31T09:00:00.000Z",
+      "phones": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/3/phones"
+          }
+        ]
+      },
+      "profile": {
+        "id": 3,
+        "lookupName": "Some Access"
+      },
+      "salesSettings": {
+        "defaultCurrency": {
+          "id": 1,
+          "lookupName": "USD"
+        },
+        "territory": null
+      },
+      "serviceSettings": {},
+      "signature": null,
+      "staffGroup": null,
       "links": [
         {
           "rel": "canonical",
-          "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/254"
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/accounts/3"
         }
       ]
     }

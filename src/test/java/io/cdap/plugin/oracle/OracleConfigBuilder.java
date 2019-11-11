@@ -151,7 +151,7 @@ public class OracleConfigBuilder {
     return this;
   }
 
-  public OracleConfigBuilder setSchema(String schema) {
+  public OracleConfigBuilder setSchema(@Nullable String schema) {
     this.schema = schema;
     return this;
   }

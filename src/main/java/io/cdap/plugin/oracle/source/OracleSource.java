@@ -62,9 +62,15 @@ public class OracleSource extends BatchSource<NullWritable, JsonObject, Structur
     FailureCollector collector = stageConfigurer.getFailureCollector();
     config.validate(collector);
     collector.getOrThrowException();
-    // TODO schema inference
-    Schema schema = config.getParsedSchema();
-    pipelineConfigurer.getStageConfigurer().setOutputSchema(schema);
+    Schema schema = getSchema();
+    Schema configuredSchema = config.getParsedSchema();
+    if (configuredSchema == null) {
+      pipelineConfigurer.getStageConfigurer().setOutputSchema(schema);
+      return;
+    }
+    OracleConfig.validateFieldsMatch(schema, configuredSchema, collector);
+    collector.getOrThrowException();
+    pipelineConfigurer.getStageConfigurer().setOutputSchema(configuredSchema);
   }
 
   @Override
@@ -94,5 +100,9 @@ public class OracleSource extends BatchSource<NullWritable, JsonObject, Structur
   public void transform(KeyValue<NullWritable, JsonObject> input, Emitter<StructuredRecord> emitter) {
     JsonObject jsonObject = input.getValue();
     emitter.emit(transformer.transform(jsonObject));
+  }
+
+  public Schema getSchema() {
+    return config.getOracleObject().getSchema();
   }
 }
