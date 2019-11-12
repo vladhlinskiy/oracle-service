@@ -18,6 +18,7 @@ package io.cdap.plugin.oracle;
 
 import io.cdap.cdap.api.data.schema.Schema;
 import io.cdap.plugin.oracle.schema.AccountsSchema;
+import io.cdap.plugin.oracle.schema.AnalyticsReportsSchema;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ import javax.annotation.Nullable;
  * Specifies the Oracle Service Cloud objects along with their display name and resource name.
  */
 public enum OracleObject {
-  ACCOUNT("Accounts", "accounts", AccountsSchema.SCHEMA);
+  ACCOUNT("Accounts", "accounts", AccountsSchema.SCHEMA),
+  ANALYTICS_REPORT("Analytics Reports", "analyticsReports", AnalyticsReportsSchema.SCHEMA);
 
   private static final Map<String, OracleObject> byDisplayName = Arrays.stream(values())
     .collect(Collectors.toMap(OracleObject::getDisplayName, Function.identity()));

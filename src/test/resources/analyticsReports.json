@@ -1,0 +1,131 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "lookupName": "Answer Notifications by Answer",
+      "createdTime": "2007-02-01T08:00:00Z",
+      "updatedTime": "2007-02-01T08:00:00Z",
+      "columns": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/1/columns"
+          }
+        ]
+      },
+      "filters": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/1/filters"
+          }
+        ]
+      },
+      "name": "Answers Viewed by Category",
+      "names": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/1/names"
+          }
+        ]
+      },
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "lookupName": "Answer Notifications by Product",
+      "createdTime": "2007-02-01T08:00:00Z",
+      "updatedTime": "2007-02-01T08:00:00Z",
+      "columns": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/2/columns"
+          }
+        ]
+      },
+      "filters": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/2/filters"
+          }
+        ]
+      },
+      "name": "Answers Viewed by Category",
+      "names": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/2/names"
+          }
+        ]
+      },
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/2"
+        }
+      ]
+    },
+    {
+      "id": 100021,
+      "lookupName": "Logged In Accounts",
+      "createdTime": "2016-01-04T20:42:12Z",
+      "updatedTime": "2016-01-04T21:15:35Z",
+      "columns": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/100021/columns"
+          }
+        ]
+      },
+      "filters": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/100021/filters"
+          }
+        ]
+      },
+      "name": "Answers Viewed by Category",
+      "names": {
+        "links": [
+          {
+            "rel": "self",
+            "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/100021/names"
+          }
+        ]
+      },
+      "links": [
+        {
+          "rel": "canonical",
+          "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports/100021"
+        }
+      ]
+    }
+  ],
+  "hasMore": false,
+  "links": [
+    {
+      "rel": "canonical",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports"
+    },
+    {
+      "rel": "describedby",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/metadata-catalog/analyticsReports",
+      "mediaType": "application/schema+json"
+    },
+    {
+      "rel": "self",
+      "href": "https://mysite.example.com/services/rest/connect/v1.4/analyticsReports"
+    }
+  ]
+}
