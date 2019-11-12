@@ -62,7 +62,7 @@ public class AnalyticsReportsSchema extends OracleObjectSchema {
    * "{@value AnalyticsReportsSchema.Columns#DESCRIPTION}" for the description of the column in the report,
    * "{@value AnalyticsReportsSchema.Columns#HEADING}" for the column heading in the report.
    */
-  public static class Columns {
+  public static class Columns extends LinkedObject {
     public static final String DATA_TYPE = "dataType";
     public static final String DESCRIPTION = "description";
     public static final String HEADING = "heading";
@@ -71,7 +71,8 @@ public class AnalyticsReportsSchema extends OracleObjectSchema {
       "analytics-reports-columns-record",
       Schema.Field.of(DATA_TYPE, Schema.nullableOf(IdLookupName.schema("reports-columns-data-type"))),
       Schema.Field.of(DESCRIPTION, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
-      Schema.Field.of(HEADING, Schema.nullableOf(Schema.of(Schema.Type.STRING)))
+      Schema.Field.of(HEADING, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
+      Schema.Field.of(LINKS, Schema.arrayOf(Link.schema("report-columns")))
     );
   }
 
@@ -87,7 +88,7 @@ public class AnalyticsReportsSchema extends OracleObjectSchema {
    * "{@value AnalyticsReportsSchema.Filters#VALUES}" for the string representation of the values for the operator to
    * apply. The right-hand side (RHS) of the filter value.
    */
-  public static class Filters {
+  public static class Filters extends LinkedObject {
     public static final String ATTRIBUTES = "attributes";
     public static final String DATA_TYPE = "dataType";
     public static final String NAME = "name";
@@ -102,7 +103,8 @@ public class AnalyticsReportsSchema extends OracleObjectSchema {
       Schema.Field.of(NAME, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
       Schema.Field.of(OPERATOR, Schema.nullableOf(IdLookupName.schema("reports-filters-operator"))),
       Schema.Field.of(PROMPT, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
-      Schema.Field.of(VALUES, Schema.nullableOf(Schema.arrayOf(Schema.of(Schema.Type.STRING))))
+      Schema.Field.of(VALUES, Schema.nullableOf(Schema.arrayOf(Schema.of(Schema.Type.STRING)))),
+      Schema.Field.of(LINKS, Schema.arrayOf(Link.schema("report-filters")))
     );
   }
 
@@ -130,14 +132,15 @@ public class AnalyticsReportsSchema extends OracleObjectSchema {
    * "{@value AnalyticsReportsSchema.Names#LANGUAGE}" for an ID which has an associated name string(these IDs can be
    * set by either value or name),
    */
-  public static class Names {
+  public static class Names extends LinkedObject {
     public static final String LABEL_TEXT = "labelText";
     public static final String LANGUAGE = "language";
 
     public static final Schema SCHEMA = Schema.recordOf(
       "analytics-reports-names-record",
       Schema.Field.of(LABEL_TEXT, Schema.nullableOf(Schema.of(Schema.Type.BOOLEAN))),
-      Schema.Field.of(LANGUAGE, Schema.nullableOf(IdLookupName.schema("reports-names-language")))
+      Schema.Field.of(LANGUAGE, Schema.nullableOf(IdLookupName.schema("reports-names-language"))),
+      Schema.Field.of(LINKS, Schema.arrayOf(Link.schema("analytics-reports-names-filters")))
     );
   }
 }
