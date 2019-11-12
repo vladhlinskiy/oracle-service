@@ -20,6 +20,7 @@ import io.cdap.cdap.api.data.schema.Schema;
 import io.cdap.plugin.oracle.schema.AccountsSchema;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,6 +56,12 @@ public enum OracleObject {
 
   public String getResourceName() {
     return resourceName;
+  }
+
+  public List<String> getFieldNames() {
+    return getSchema().getFields().stream()
+      .map(Schema.Field::getName)
+      .collect(Collectors.toList());
   }
 
   public Schema getSchema() {

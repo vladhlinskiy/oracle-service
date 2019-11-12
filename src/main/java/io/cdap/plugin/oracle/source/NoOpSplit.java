@@ -23,6 +23,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 
 /**
+ * TODO investigate possible options for splitter implementation
  * A no-op split.
  */
 public class NoOpSplit extends InputSplit implements Writable {

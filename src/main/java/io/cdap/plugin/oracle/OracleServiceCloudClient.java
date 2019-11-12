@@ -40,6 +40,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Oracle Service Cloud client.
@@ -55,10 +57,36 @@ public class OracleServiceCloudClient implements Closeable {
     this.serviceRoot = String.format("%s/%s", config.getServerUrl(), OracleConstants.API_ROOT_PATH);
   }
 
+  /**
+   * Retrieves records collection of the specified Oracle Service Cloud object type. All object's fields are included.
+   * See:
+   * <a href="https://docs.oracle.com/en/cloud/saas/service/19c/cxsvc/c_osvc_manage_collections.html">
+   * Manage Collections
+   * </a>
+   *
+   * @param oracleObject Oracle Service Cloud object type.
+   * @return {@link JsonObject} iterator for the specified Oracle Service Cloud object type.
+   * @throws IOException if the specified Oracle Service Cloud object cannot be read.
+   */
   public Iterator<JsonObject> collection(OracleObject oracleObject) throws IOException {
-    // TODO include 'fields' query parameter
-    // https://docs.oracle.com/en/cloud/saas/service/19c/cxsvc/c_osvc_manage_collections.html
-    CloseableHttpResponse response = httpGet(serviceRoot + oracleObject.getResourceName());
+    return collection(oracleObject, oracleObject.getFieldNames());
+  }
+
+  /**
+   * Retrieves records collection of the specified Oracle Service Cloud object type. Only specified fields are included.
+   * See:
+   * <a href="https://docs.oracle.com/en/cloud/saas/service/19c/cxsvc/c_osvc_manage_collections.html">
+   * Manage Collections
+   * </a>
+   *
+   * @param oracleObject Oracle Service Cloud object type.
+   * @param fields       list of fields to include.
+   * @return {@link JsonObject} iterator for the specified Oracle Service Cloud object type.
+   * @throws IOException if the specified Oracle Service Cloud object cannot be read.
+   */
+  public Iterator<JsonObject> collection(OracleObject oracleObject, List<String> fields) throws IOException {
+    String fieldsQueryParam = "?fields=" + fields.stream().collect(Collectors.joining(","));
+    CloseableHttpResponse response = httpGet(serviceRoot + oracleObject.getResourceName() + fieldsQueryParam);
     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
     JsonArray collection = PARSER.parse(responseString).getAsJsonObject().getAsJsonArray(OracleConstants.ITEMS);
 
@@ -86,7 +114,7 @@ public class OracleServiceCloudClient implements Closeable {
     HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
     // TODO ssl
     // TODO timeouts
-    // basic auth
+    // Basic auth
     CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
     if (config.getAuthenticationType() == AuthenticationType.BASIC) {
       AuthScope authScope = new AuthScope(HttpHost.create(config.getServerUrl()));
@@ -94,11 +122,12 @@ public class OracleServiceCloudClient implements Closeable {
                                          new UsernamePasswordCredentials(config.getUser(), config.getPassword()));
     }
     httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-    // OAuth 2
     ArrayList<Header> clientHeaders = new ArrayList<>();
     if (config.getAuthenticationType() == AuthenticationType.OAUTH) {
+      // OAuth 2
       clientHeaders.add(new BasicHeader("Authorization", "Bearer " + config.getAccessToken()));
     } else if (config.getAuthenticationType() == AuthenticationType.SESSION) {
+      // Session auth
       clientHeaders.add(new BasicHeader("Authorization", "Session " + config.getSessionId()));
     }
     httpClientBuilder.setDefaultHeaders(clientHeaders);

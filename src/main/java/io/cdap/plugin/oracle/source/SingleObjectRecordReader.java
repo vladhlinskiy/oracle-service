@@ -17,11 +17,9 @@ package io.cdap.plugin.oracle.source;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.cdap.plugin.oracle.OracleConfig;
 import io.cdap.plugin.oracle.OracleServiceCloudClient;
-import org.apache.commons.collections.iterators.EmptyIterator;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.InputSplit;
@@ -57,6 +55,7 @@ public class SingleObjectRecordReader extends RecordReader<NullWritable, JsonObj
     OracleConfig config = gson.fromJson(confJson, OracleConfig.class);
     cloudClient = new OracleServiceCloudClient(config);
 
+    // TODO start date/end date support
     this.iterator = cloudClient.collection(config.getOracleObject());
   }
 
