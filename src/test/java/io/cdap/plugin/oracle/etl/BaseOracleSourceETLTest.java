@@ -59,7 +59,7 @@ public abstract class BaseOracleSourceETLTest extends HydratorTestBase {
   public TestName name = new TestName();
 
   @Rule
-  public WireMockRule wireMockRule = new WireMockRule();
+  public final WireMockRule wireMockRule = new WireMockRule();
 
   @ClassRule
   public static final TestConfiguration CONFIG = new TestConfiguration("explore.enabled", false);

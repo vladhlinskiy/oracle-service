@@ -235,7 +235,7 @@ public class OracleConstants {
    * "{@value OracleConstants.AccountEmails#INVALID}" for attribute which indicates whether the email address is
    * disabled.
    */
-  public static class AccountEmails {
+  public static class AccountEmails extends LinkedObject {
     public static final String ADDRESS = "address";
     public static final String ADDRESS_TYPE = "addressType";
     public static final String CERTIFICATE = "certificate";
@@ -246,7 +246,8 @@ public class OracleConstants {
       Schema.Field.of(ADDRESS, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
       Schema.Field.of(ADDRESS_TYPE, Schema.nullableOf(IdLookupName.schema("account-address-type-record"))),
       Schema.Field.of(CERTIFICATE, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
-      Schema.Field.of(INVALID, Schema.nullableOf(Schema.of(Schema.Type.BOOLEAN)))
+      Schema.Field.of(INVALID, Schema.nullableOf(Schema.of(Schema.Type.BOOLEAN))),
+      Schema.Field.of(LINKS, Schema.arrayOf(Link.schema("account-emails")))
     );
   }
 
@@ -278,7 +279,7 @@ public class OracleConstants {
    * excluding the non-numeric characters from the value of the Number attribute. For example, if the Number attribute
    * has a value of 1 (406) 522-4200, this field is populated as 14065224200.
    */
-  public static class AccountPhone {
+  public static class AccountPhone extends LinkedObject {
     public static final String NUMBER = "number";
     public static final String PHONE_TYPE = "phoneType";
     public static final String RAW_NUMBER = "rawNumber";
@@ -287,7 +288,8 @@ public class OracleConstants {
       "account-phone-record",
       Schema.Field.of(NUMBER, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
       Schema.Field.of(PHONE_TYPE, Schema.nullableOf(IdLookupName.schema("account-phone-type-record"))),
-      Schema.Field.of(RAW_NUMBER, Schema.nullableOf(Schema.of(Schema.Type.STRING)))
+      Schema.Field.of(RAW_NUMBER, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
+      Schema.Field.of(LINKS, Schema.arrayOf(Link.schema("account-phone")))
     );
   }
 
@@ -402,7 +404,6 @@ public class OracleConstants {
       Schema.Field.of(DISPLAY_NAME, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
       Schema.Field.of(DISPLAY_ORDER, Schema.nullableOf(Schema.of(Schema.Type.INT))),
       Schema.Field.of(EMAIL_NOTIFICATION, Schema.nullableOf(IdLookupName.schema("email-notification"))),
-      // TODO emails must extend oracle object resource?
       Schema.Field.of(EMAILS, Schema.nullableOf(AccountEmails.SCHEMA)),
       Schema.Field.of(LOGIN, Schema.nullableOf(Schema.of(Schema.Type.STRING))),
       Schema.Field.of(MANAGER, Schema.nullableOf(IdLookupName.schema("manager"))),
