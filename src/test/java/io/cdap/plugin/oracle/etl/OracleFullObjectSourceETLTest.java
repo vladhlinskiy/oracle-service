@@ -48,7 +48,7 @@ public class OracleFullObjectSourceETLTest extends BaseOracleSourceETLTest {
     String accountsJson = readResourceFile(resourceName + ".json");
     JsonObject accounts = PARSER.parse(accountsJson).getAsJsonObject();
     accountsExpected = new HashMap<>();
-    accounts.getAsJsonArray("items").forEach(jsonElement -> {
+    accounts.getAsJsonArray(OracleConstants.ITEMS).forEach(jsonElement -> {
       JsonObject account = jsonElement.getAsJsonObject();
       accountsExpected.put(account.get("id").getAsInt(), account);
     });

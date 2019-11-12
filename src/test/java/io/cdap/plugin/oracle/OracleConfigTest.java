@@ -304,9 +304,71 @@ public class OracleConfigTest {
     assertValidationFailed(failureCollector, OracleConstants.ACCESS_TOKEN);
   }
 
-  // TODO schema tests
 
-  protected static void assertValidationFailed(MockFailureCollector failureCollector, String paramName) {
+  @Test
+  public void testValidateSchemaInvalid() {
+    Schema schema = Schema.recordOf("invalid-schema", Schema.Field.of("unsupported", Schema.of(Schema.Type.BYTES)));
+    OracleConfig config = getValidConfigBuilder()
+      .setSchema(schema.toString())
+      .build();
+
+    MockFailureCollector failureCollector = new MockFailureCollector(MOCK_STAGE);
+    config.validate(failureCollector);
+    assertOutputSchemaValidationFailed(failureCollector, "unsupported");
+  }
+
+  @Test
+  public void testValidateComponentSchemaInvalid() {
+    Schema schema = Schema.recordOf("invalid-schema",
+                                    Schema.Field.of("unsupported", Schema.arrayOf(Schema.of(Schema.Type.BYTES))));
+    OracleConfig config = getValidConfigBuilder()
+      .setSchema(schema.toString())
+      .build();
+
+    MockFailureCollector failureCollector = new MockFailureCollector(MOCK_STAGE);
+    config.validate(failureCollector);
+    assertOutputSchemaValidationFailed(failureCollector, "unsupported");
+  }
+
+  @Test
+  public void testValidateMapSchemaInvalid() {
+    Schema schema = Schema.recordOf(
+      "invalid-schema",
+      Schema.Field.of("unsupported-key", Schema.mapOf(Schema.of(Schema.Type.LONG), Schema.of(Schema.Type.STRING))));
+    OracleConfig config = getValidConfigBuilder()
+      .setSchema(schema.toString())
+      .build();
+
+    MockFailureCollector failureCollector = new MockFailureCollector(MOCK_STAGE);
+    config.validate(failureCollector);
+    assertOutputSchemaValidationFailed(failureCollector, "unsupported-key");
+  }
+
+  @Test
+  public void testValidateNestedFieldSchemaInvalid() {
+    Schema nestedRecordSchema = Schema.recordOf("invalid-schema-nested",
+                                                Schema.Field.of("nested", Schema.of(Schema.Type.BYTES)));
+    Schema schema = Schema.recordOf("invalid-schema", Schema.Field.of("object", nestedRecordSchema));
+    OracleConfig config = getValidConfigBuilder()
+      .setSchema(schema.toString())
+      .build();
+
+    MockFailureCollector failureCollector = new MockFailureCollector(MOCK_STAGE);
+    config.validate(failureCollector);
+    assertOutputSchemaValidationFailed(failureCollector, "nested");
+  }
+
+  private static void assertOutputSchemaValidationFailed(MockFailureCollector failureCollector, String fieldName) {
+    List<ValidationFailure> failureList = failureCollector.getValidationFailures();
+    Assert.assertEquals(1, failureList.size());
+    ValidationFailure failure = failureList.get(0);
+    List<ValidationFailure.Cause> causeList = getCauses(failure, CauseAttributes.OUTPUT_SCHEMA_FIELD);
+    Assert.assertEquals(1, causeList.size());
+    ValidationFailure.Cause cause = causeList.get(0);
+    Assert.assertEquals(fieldName, cause.getAttribute(CauseAttributes.OUTPUT_SCHEMA_FIELD));
+  }
+
+  private static void assertValidationFailed(MockFailureCollector failureCollector, String paramName) {
     List<ValidationFailure> failureList = failureCollector.getValidationFailures();
     Assert.assertEquals(1, failureList.size());
     ValidationFailure failure = failureList.get(0);

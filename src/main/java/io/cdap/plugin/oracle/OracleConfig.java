@@ -40,11 +40,11 @@ import javax.annotation.Nullable;
  */
 public class OracleConfig extends PluginConfig {
 
-  // TODO review
   private static final Set<Schema.Type> SUPPORTED_TYPES = ImmutableSet.of(Schema.Type.BOOLEAN, Schema.Type.INT,
-                                                                          Schema.Type.DOUBLE, Schema.Type.LONG,
-                                                                          Schema.Type.STRING, Schema.Type.RECORD,
-                                                                          Schema.Type.ARRAY, Schema.Type.MAP);
+                                                                          Schema.Type.FLOAT, Schema.Type.DOUBLE,
+                                                                          Schema.Type.LONG, Schema.Type.STRING,
+                                                                          Schema.Type.RECORD, Schema.Type.ARRAY,
+                                                                          Schema.Type.MAP);
 
   private static final Set<Schema.LogicalType> SUPPORTED_LOGICAL_TYPES = ImmutableSet.of(Schema.LogicalType.DECIMAL);
 
@@ -423,9 +423,9 @@ public class OracleConfig extends PluginConfig {
     for (Schema.Field field : providedSchema.getFields()) {
       Schema.Field inferredField = inferredSchema.getField(field.getName());
       if (inferredField == null) {
-        // Inferred schema may miss some fields, depending on the specified 'Sample Size'
-        // See: https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/infer.html
-        continue;
+        String errorMessage = String.format("Field '%s' does not exist in Oracle Service Cloud", field.getName());
+        collector.addFailure(errorMessage, String.format("Remove field '%s' from the output schema", field.getName()))
+          .withOutputSchemaField(field.getName(), null);
       }
       Schema inferredFieldSchema = inferredField.getSchema();
       Schema providedFieldSchema = field.getSchema();
@@ -443,12 +443,6 @@ public class OracleConfig extends PluginConfig {
       Schema.Type providedType = providedFieldNonNullableSchema.getType();
       Schema.LogicalType providedLogicalType = providedFieldNonNullableSchema.getLogicalType();
       if (inferredType != providedType && inferredLogicalType != providedLogicalType) {
-        boolean isProvidedTypeNumeric = providedType == Schema.Type.INT || providedType == Schema.Type.LONG
-          || providedType == Schema.Type.DOUBLE || providedLogicalType == Schema.LogicalType.DECIMAL;
-        if (inferredType == Schema.Type.STRING && isProvidedTypeNumeric) {
-          // 'string' is the default type for Couchbase's 'number' type in the inferred schema
-          continue;
-        }
         String errorMessage = String.format("Expected field '%s' to be of type '%s', but it is of type '%s'",
                                             field.getName(), inferredFieldNonNullableSchema.getDisplayName(),
                                             providedFieldNonNullableSchema.getDisplayName());

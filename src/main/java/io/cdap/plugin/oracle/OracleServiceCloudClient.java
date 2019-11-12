@@ -60,7 +60,7 @@ public class OracleServiceCloudClient implements Closeable {
     // https://docs.oracle.com/en/cloud/saas/service/19c/cxsvc/c_osvc_manage_collections.html
     CloseableHttpResponse response = httpGet(serviceRoot + oracleObject.getResourceName());
     String responseString = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-    JsonArray collection = PARSER.parse(responseString).getAsJsonObject().getAsJsonArray("items"); // TODO
+    JsonArray collection = PARSER.parse(responseString).getAsJsonObject().getAsJsonArray(OracleConstants.ITEMS);
 
     return Iterators.transform(collection.<JsonElement>iterator(), JsonElement::getAsJsonObject);
   }
@@ -98,6 +98,8 @@ public class OracleServiceCloudClient implements Closeable {
     ArrayList<Header> clientHeaders = new ArrayList<>();
     if (config.getAuthenticationType() == AuthenticationType.OAUTH) {
       clientHeaders.add(new BasicHeader("Authorization", "Bearer " + config.getAccessToken()));
+    } else if (config.getAuthenticationType() == AuthenticationType.SESSION) {
+      clientHeaders.add(new BasicHeader("Authorization", "Session " + config.getSessionId()));
     }
     httpClientBuilder.setDefaultHeaders(clientHeaders);
 
